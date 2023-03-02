@@ -26,4 +26,4 @@ title
 response.css('h1.hed::text').get()
 
 article 
-response.css('div.article-body p::text, div.article-body  a::text').getall()
+response.css('div.article-body > p::text, div.article-body > p > a::text').getall()
