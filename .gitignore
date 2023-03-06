@@ -1,0 +1,7 @@
+*.txt
+*.csv
+*.xlsx
+*.log
+Testing_python_libraries\.ipynb_checkpoints/
+.scrapy/
+__pycache__/
