@@ -14,9 +14,9 @@ driver = webdriver.Edge(options=opts)
 driver.get('https://www.datacamp.com/users/sign_in')
 driver.implicitly_wait(8)
 
-# email_input = ''
-# continuation = ''
-# password_input = ''
+email_input = ''
+continuation = ''
+password_input = ''
 
 time.sleep(5.01)
 email = driver.find_element('id', 'user_email')
