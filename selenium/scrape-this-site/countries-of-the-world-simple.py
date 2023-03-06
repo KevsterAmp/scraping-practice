@@ -33,3 +33,4 @@ for div in divs:
 df = pd.DataFrame(test_dict)
 print(df.head())
 df.to_csv('test.csv', index=False)
+driver.quit()

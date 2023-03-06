@@ -39,7 +39,8 @@ def main():
         except:
             time.sleep(3)
             break
-    
+        
+    driver.quit()
     df = pd.DataFrame(output_dict)
     print(df.head())
     df.to_csv('hockey-teams.csv', index=False)

@@ -21,3 +21,5 @@ command = driver.find_element("xpath", "//table/tbody/tr[10]/td[2]/select/option
 time.sleep(3)
 button = driver.find_element("name", "submit").click()
 time.sleep(3)
+
+driver.quit()
