@@ -12,6 +12,8 @@ BOT_NAME = "crisisgroup"
 SPIDER_MODULES = ["crisisgroup.spiders"]
 NEWSPIDER_MODULE = "crisisgroup.spiders"
 
+LOG_LEVEL = "INFO"
+LOG_ENABLED = True
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36 Edg/110.0.1587.57"
@@ -20,7 +22,9 @@ USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
-CONCURRENT_REQUESTS = 300
+CONCURRENT_REQUESTS = 64
+
+handle_httpstatus_list = [200, 301]
 
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
@@ -31,7 +35,7 @@ CONCURRENT_REQUESTS = 300
 #CONCURRENT_REQUESTS_PER_IP = 16
 
 # Disable cookies (enabled by default)
-#COOKIES_ENABLED = False
+COOKIES_ENABLED = False
 
 # Disable Telnet Console (enabled by default)
 #TELNETCONSOLE_ENABLED = False
