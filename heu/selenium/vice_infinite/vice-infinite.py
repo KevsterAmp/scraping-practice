@@ -55,6 +55,10 @@ for _ in range(250):
 driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
 time.sleep(3)
 
+# Record the end time of the scrolling process
+elapsed_time = time.time() - start_time
+print("Elapsed time after finishing scrolling: {:.2f} seconds".format(elapsed_time))
+
 # Create an empty dictionary to store the scraped data
 data = {'link': [], 'title': [], 'author': [], 'date': []}
 
