@@ -6,7 +6,7 @@ import time
 os.environ['PATH'] += 'C:\edgedriver_win64'
 
 driver = webdriver.Edge() 
-driver.get('https://www.vice.com/en/section/entertainment')
+driver.get('https://www.vice.com/en/section/identity')
 driver.implicitly_wait(8)
 
 last_height = driver.execute_script('return document.body.scrollHeight')
@@ -30,11 +30,23 @@ time.sleep(5) #delay to load last links of the page
 divs = driver.find_elements("css selector", "li.feed__list__item.feed__list__item--card")
 data = {'link': [], 'title': [], 'author': [], 'date': []}
 for div in divs:
-    top = div.find_element("css selector", "div > div > h3 > a")
-    link = top.get_attribute('href')
-    title = top.text
-    author = div.find_element("css selector", "div.vice-card-details__byline").text
-    date = div.find_element("css selector", "time.vice-card-details__pub-date").text
+    try:
+        top = div.find_element("css selector", "div > div > h3 > a")
+    except:
+        top = ""
+    
+    if top is not "":
+        link = top.get_attribute('href')
+        title = top.text
+    else:
+        link = ""
+        title = ""
+
+    author = div.find_elements("css selector", "div.vice-card-details__byline").text
+    date = div.find_elements("css selector", "time.vice-card-details__pub-date").text
+    
+    author = author[0] if author else ""
+    date = date[0] if date else ""
 
     data['author'].append(author)
     data['date'].append(date)
@@ -44,6 +56,6 @@ for div in divs:
 driver.quit()
 
 df = pd.DataFrame(data)
-df.to_csv('entertainment_links.csv', index=False)
+df.to_csv('identity_links.csv', index=False)
 print(df.head())
 print(df.shape)
