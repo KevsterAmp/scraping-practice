@@ -2,22 +2,28 @@ import pandas as pd
 from selenium import webdriver
 import os
 import time
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 os.environ['PATH'] += 'C:\edgedriver_win64'
 
 driver = webdriver.Edge() 
-driver.get('https://www.vice.com/en/section/identity')
+driver.get('https://www.vice.com/en/section/tech')
 driver.implicitly_wait(8)
+wait = WebDriverWait(driver, 20)
+start_time = time.time()
 
 last_height = driver.execute_script('return document.body.scrollHeight')
-for _ in range(100):
+for _ in range(250):
     print("Scrolling down "+ str(_+1) + " times")
     driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
     try:
-        element = driver.find_element("class name", "loading-lockup-infinite__button")
+        element = wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "loading-lockup-infinite__button")))
         driver.execute_script("arguments[0].click();", element)
-    except:
-        break    
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        break 
     time.sleep(5) # adjust delay until page is fully loaded.
     new_height = driver.execute_script('return document.body.scrollHeight')
     if new_height == last_height:
@@ -25,28 +31,32 @@ for _ in range(100):
     last_height = new_height
 
 driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
-time.sleep(5) #delay to load last links of the page
+time.sleep(3) #delay to load last links of the page
+
+elapsed_time = time.time() - start_time
+print("Elapsed time after finishing scrolling: {:.2f} seconds".format(elapsed_time))
 
 divs = driver.find_elements("css selector", "li.feed__list__item.feed__list__item--card")
 data = {'link': [], 'title': [], 'author': [], 'date': []}
+
 for div in divs:
     try:
         top = div.find_element("css selector", "div > div > h3 > a")
     except:
         top = ""
     
-    if top is not "":
+    if top != "":
         link = top.get_attribute('href')
         title = top.text
     else:
         link = ""
         title = ""
 
-    author = div.find_elements("css selector", "div.vice-card-details__byline").text
-    date = div.find_elements("css selector", "time.vice-card-details__pub-date").text
+    author = div.find_elements("css selector", "div.vice-card-details__byline")
+    date = div.find_elements("css selector", "time.vice-card-details__pub-date")
     
-    author = author[0] if author else ""
-    date = date[0] if date else ""
+    author = author[0].text if author else ""
+    date = date[0].text if date else ""
 
     data['author'].append(author)
     data['date'].append(date)
@@ -56,6 +66,10 @@ for div in divs:
 driver.quit()
 
 df = pd.DataFrame(data)
-df.to_csv('identity_links.csv', index=False)
+df.to_csv('tech_links.csv', index=False)
 print(df.head())
 print(df.shape)
+
+elapsed_time2 = time.time() - start_time
+print("Elapsed time after finishing scrolling: {:.2f} seconds".format(elapsed_time))
+print("Elapsed time after finishing the whole process: {:.2f} seconds".format(elapsed_time2))
