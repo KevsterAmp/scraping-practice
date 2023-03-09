@@ -6,21 +6,26 @@ import time
 os.environ['PATH'] += 'C:\edgedriver_win64'
 
 driver = webdriver.Edge() 
-driver.get('https://www.vice.com/en/section/world')
+driver.get('https://www.vice.com/en/section/entertainment')
 driver.implicitly_wait(8)
 
 last_height = driver.execute_script('return document.body.scrollHeight')
-for _ in range(5):
+for _ in range(100):
+    print("Scrolling down "+ str(_+1) + " times")
     driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
-    element = driver.find_element("class name", "loading-lockup-infinite__button")
-    driver.execute_script("arguments[0].click();", element)    
-    time.sleep(5) # adjust delay until page is fully loaded
+    try:
+        element = driver.find_element("class name", "loading-lockup-infinite__button")
+        driver.execute_script("arguments[0].click();", element)
+    except:
+        break    
+    time.sleep(5) # adjust delay until page is fully loaded.
     new_height = driver.execute_script('return document.body.scrollHeight')
     if new_height == last_height:
         break
     last_height = new_height
 
-#kunin na lahat ng quotes kingina
+driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
+time.sleep(5) #delay to load last links of the page
 
 divs = driver.find_elements("css selector", "li.feed__list__item.feed__list__item--card")
 data = {'link': [], 'title': [], 'author': [], 'date': []}
@@ -39,6 +44,6 @@ for div in divs:
 driver.quit()
 
 df = pd.DataFrame(data)
-df.to_csv('links.csv', index=False)
+df.to_csv('entertainment_links.csv', index=False)
 print(df.head())
 print(df.shape)
