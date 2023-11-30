@@ -5,3 +5,4 @@
 Testing_python_libraries\.ipynb_checkpoints/
 .scrapy/
 __pycache__/
+env/
